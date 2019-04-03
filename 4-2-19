@@ -1,0 +1,53 @@
+#include <kipr/botball.h>
+void cu(){
+    camera_update();
+    camera_update();
+    camera_update();
+    camera_update();
+}
+
+int main()
+{	
+    int res_x = get_camera_width();
+    float tolerance = .2;
+    int inCenter = 0;
+    
+    //create_connect();
+    camera_open_black();
+    msleep(2000);
+    cu();
+    point2 temp = get_object_centroid(0,0);
+    printf("(%d,%d) Centroid \n\n",temp.x,temp.y);
+    
+    while ( inCenter != 1){
+        
+        point2 p = get_object_centroid(0,0);
+                
+        if ( p.x < (res_x / 2) - (res_x * tolerance)){
+            printf(" ob 0 to left of mid \n");
+            //create_drive_direct(50,-50); // pivot right
+            msleep(10);
+            //create_stop();
+            printf(" centroid x is %d\n", get_object_centroid(0,0).x);
+        }
+        
+        else if ( p.x > (res_x / 2) + (res_x * tolerance)){
+            printf(" ob 0 to right of mid \n");
+			//create_drive_direct(50,-50); // pivot left
+           	msleep(10);
+           	//create_stop();  
+            printf(" centroid x is %d\n", get_object_centroid(0,0).x);
+        }
+        
+        else {
+            printf(" ob 0 in mid \n");
+            inCenter = 1; // ob 0 is in center of camera, exit to a drive straight routine
+        }
+        
+        cu();
+    }
+    //camera_close();
+    printf("Finished Search \n");
+    create_disconnect();
+    return 0;
+}
